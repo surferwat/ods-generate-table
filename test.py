@@ -2,8 +2,9 @@
 # populated with example values.
 
 import unittest
+from unittest import mock
 import os
-from main import Table, TableEntries
+from main import Config, Table, TableEntries
 
 
 
@@ -11,8 +12,10 @@ from main import Table, TableEntries
 
 class TestTableEntries(unittest.TestCase):
   @classmethod
+  @mock.patch.dict("os.environ", {"PATH_TO_SOURCE_FILES": "test/screened", "PATH_TO_TABLE_TEMPLATE": "test/test_table.ods" })
   def setUpClass(cls):
-    cls.table_entries = TableEntries()
+    cls.config = Config()
+    cls.table_entries = TableEntries(cls.config.path_to_source_files)
     
   def tearDown(self):
     self.table_entries.source_file_names = []
@@ -51,8 +54,10 @@ class TestTableEntries(unittest.TestCase):
 
 class TestTable(unittest.TestCase):
   @classmethod
+  @mock.patch.dict("os.environ", {"PATH_TO_SOURCE_FILES": "test/screened", "PATH_TO_TABLE_TEMPLATE": "test/test_table.ods" })
   def setUpClass(cls):
-    cls.table = Table()
+    cls.config = Config()
+    cls.table = Table(cls.config.path_to_table_template)
     cls.table.table_dest_path = "test"
   
   def test_set_table_entries(self):

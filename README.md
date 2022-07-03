@@ -14,8 +14,15 @@ A python script that generates an OpenDocument Spreadsheet Document format (ods 
 * pyexcel-xlsx 0.6.0
 
 ## Installation
+Step 1: clone repo
+
 ```
 git clone https://github.com/az107hq/ods-generate-table.git
+```
+Step 2: Add env variables
+```
+export PATH_TO_SOURCE_FILES=path/to/source/files
+export PATH_TO_TABLE_TEMPLATE=path/to/table/template
 ```
 
 ## Usage
