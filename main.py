@@ -27,7 +27,6 @@ class TableEntries:
   FORM_IDENTIFIER_CELL = "A1"
   
   # Constants for locations of values that make up a table entry
-  PROPERTY_NAME_CELL = 'C12'
   ADMIN_AREA_CELL = 'C25'
   DISTRICT_CELL = 'C13'
   PROPERTY_TYPE_CELL = 'C31'
@@ -104,9 +103,9 @@ class TableEntries:
     Returns:
       The list of dictionaries.
     """
-    for file_name in self.source_file_names:
-      sheet = self.get_data(file_name)
-      property_name = sheet[self.PROPERTY_NAME_CELL]
+    for file_path in self.source_file_names:
+      sheet = self.get_data(file_path)
+  
       admin_area = sheet[self.ADMIN_AREA_CELL]
       district = sheet[self.DISTRICT_CELL]
       property_type = sheet[self.PROPERTY_TYPE_CELL]
@@ -115,14 +114,14 @@ class TableEntries:
       price = sheet[self.PRICE_CELL]
       price_per_area = sheet[self.PRICE_PER_AREA_CELL]
       self.table_entries.append({
-        'property_name':property_name, 
         'admin_area': admin_area, 
         'district': district, 
         'property_type': property_type, 
         'year_built': year_built,
         'total_area': total_area, 
         'price': price, 
-        'price_per_area': price_per_area
+        'price_per_area': price_per_area,
+        'file_path': file_path
       })
     return self.table_entries
 
@@ -147,7 +146,7 @@ class Table:
   TOTAL_AREA_COL = 6
   PRICE_COL = 7
   PRICE_PER_AREA_COL = 8
-  PROPERTY_NAME_COL = 15
+  FILE_PATH_COL = 15
   
   table_template_path = ""
   table_dest_path = "/"
@@ -225,7 +224,7 @@ class Table:
       self.table_sheet[row - 1, self.TOTAL_AREA_COL - 1] = entry['total_area']
       self.table_sheet[row - 1, self.PRICE_COL - 1] = entry['price']
       self.table_sheet[row - 1, self.PRICE_PER_AREA_COL - 1] = entry['price_per_area']
-      self.table_sheet[row - 1, self.PROPERTY_NAME_COL - 1] = entry['property_name']
+      self.table_sheet[row - 1, self.FILE_PATH_COL - 1] = entry['file_path']
       row = row + 1
     
     self.table_sheet[self.FIRST_ROW - 3, self.HEADER_COL - 1] = str(date.today().year) + "年" + str(date.today().month) + "月"

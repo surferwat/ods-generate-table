@@ -62,14 +62,14 @@ class TestTable(unittest.TestCase):
   
   def test_set_table_entries(self):
     entries = [{
-      'property_name': "property_name", 
       'admin_area': "admin_area", 
       'district': "district", 
       'property_type': "property_type", 
       'year_built': "year_built",
       'total_area': "total_area", 
       'price': "price", 
-      'price_per_area': "price_per_area"
+      'price_per_area': "price_per_area",
+      'file_path': "file_path"
     }]
     self.table.set_table_entries(entries)
     self.assertEqual(self.table.table_entries, entries)
@@ -85,14 +85,14 @@ class TestTable(unittest.TestCase):
 
   def test_generate(self):
     entries = [{
-      'property_name': "property_name", 
       'admin_area': "admin_area", 
       'district': "district", 
       'property_type': "property_type", 
       'year_built': "year_built",
       'total_area': "total_area", 
       'price': "price", 
-      'price_per_area': "price_per_area"
+      'price_per_area': "price_per_area",
+      'file_path': "file_path"
     }]
     self.table.set_table_entries(entries)
     self.table.generate()
@@ -107,14 +107,14 @@ class TestTable(unittest.TestCase):
   
   def test_save(self):
     entries = [{
-      'property_name': "property_name", 
       'admin_area': "admin_area", 
       'district': "district", 
       'property_type': "property_type", 
       'year_built': "year_built",
       'total_area': "total_area", 
       'price': "price", 
-      'price_per_area': "price_per_area"
+      'price_per_area': "price_per_area",
+      'file_path': "file_path", 
     }]
     self.table.set_table_entries(entries)
     self.table.generate()
