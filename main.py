@@ -6,6 +6,11 @@ import sys
 import pyexcel as pe
 from datetime import date
 
+
+
+
+
+
 class Config:
   path_to_source_files = ""
   path_to_table_template = ""
@@ -21,6 +26,11 @@ class Config:
     except:
       print("env variable does not exist: PATH_TO_TABLE_TEMPLATE")
 
+
+
+
+
+
 class TableEntries:
   # Constants used to identify relevant source files
   FORM_IDENTIFIER = "スクリーニングフォーム"
@@ -31,7 +41,8 @@ class TableEntries:
   DISTRICT_CELL = 'C13'
   PROPERTY_TYPE_CELL = 'C31'
   YEAR_BUILT_CELL = 'C32'
-  TOTAL_AREA_CELL = 'C35'
+  BUILDING_AREA_CELL = 'C35'
+  ROOM_AREA_CELL = 'C41'
   PRICE_CELL = 'C7'
   PRICE_PER_AREA_CELL = 'C8'
 
@@ -89,7 +100,7 @@ class TableEntries:
     Args:
       file_path: The path to the file to be checked.
     Returns:
-      True if relevant source file, False otherwise
+      True if relevant source file, False otherwise.
     """
     len_from_end = 3
     if file_path[-len_from_end:] == "ods":
@@ -97,7 +108,24 @@ class TableEntries:
       return sheet[self.FORM_IDENTIFIER_CELL] == self.FORM_IDENTIFIER
     else:
       return False
-
+  
+  def set_total_area(self, building_area, room_area):
+    """Sets a value for the total area depending on the input values for 
+    building_area and room_area.
+    Args:
+      building_area: The total area of the building.
+      room_area: The total area of the room.
+    Returns:
+      A value for the applicable total area.
+    """
+    if building_area != "-":
+      total_area = building_area
+    elif room_area != "-":
+      total_area = room_area
+    else:
+      total_area = "-"
+    return total_area
+    
   def generate(self):
     """Generates a list of dictionaries representing tablerow entries.
     Returns:
@@ -110,7 +138,7 @@ class TableEntries:
       district = sheet[self.DISTRICT_CELL]
       property_type = sheet[self.PROPERTY_TYPE_CELL]
       year_built = sheet[self.YEAR_BUILT_CELL]
-      total_area = sheet[self.TOTAL_AREA_CELL]
+      total_area = self.set_total_area(sheet[self.BUILDING_AREA_CELL], sheet[self.ROOM_AREA_CELL])
       price = sheet[self.PRICE_CELL]
       price_per_area = sheet[self.PRICE_PER_AREA_CELL]
       self.table_entries.append({

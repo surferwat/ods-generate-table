@@ -41,6 +41,12 @@ class TestTableEntries(unittest.TestCase):
     dir_path = "test/screened"
     self.table_entries.set_source_file_names(dir_path)
     self.assertEqual(self.table_entries.source_file_names, ["test/screened/test.ods"])
+  
+  def test_set_total_area(self):
+    building_area = "-"
+    room_area = "37"
+    total_area = self.table_entries.set_total_area(building_area, room_area)
+    self.assertEqual(total_area,"37")
     
   def test_generate(self):
     dir_path = "test/screened"
