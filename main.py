@@ -14,6 +14,7 @@ from datetime import date
 class Config:
   path_to_source_files = ""
   path_to_table_template = ""
+  subject_month = ""
 
   def __init__(self):
     try:
@@ -25,6 +26,9 @@ class Config:
       self.path_to_table_template = "test/test_table.ods" if os.environ["PATH_TO_TABLE_TEMPLATE"] == "" else os.environ["PATH_TO_TABLE_TEMPLATE"]
     except:
       print("env variable does not exist: PATH_TO_TABLE_TEMPLATE")
+
+    prompt = "What is the month for which you are generating the table? Enter two digs (e.g., 01 for Jan) "
+    self.subject_month = input(prompt) # add validation
 
 
 
@@ -47,16 +51,29 @@ class TableEntries:
   PRICE_PER_AREA_CELL = 'C8'
 
   source_file_names = []
+  subject_month = ""
   table_entries = []
 
-  def __init__(self, dir_path):
+  def __init__(self, dir_path, subject_month):
     """Initializes Table Entries.
     Args:
       dir_path: The path to the directory location of source files.
+      subject_month: The month that is relevant to the table.
     Returns:
       Nothing.
     """
     self.set_source_file_names(dir_path)
+    self.set_subject_month(subject_month)
+  
+  def set_subject_month(self, subject_month):
+    """Sets subject_month with a value representing the month relevant 
+    for the table.
+    Args:
+      subject_month: The month relevant for the table.
+    Returns:
+      Nothing.
+    """
+    self.subject_month = subject_month
 
   def check_dir_path(self, dir_path):
     """Checks whether directory exists.
@@ -68,6 +85,38 @@ class TableEntries:
     if not os.path.isdir(dir_path):
       print("Dir path does not exist: " + dir_path + ". Program exited.")
       sys.exit(0)
+  
+  def extract_month(self, file_path):
+    """Extracts the two digits that represent the month from the file name.
+    Args:
+      file_path: The path to the file to be checked.
+    Returns:
+      Two digits that represent the month in the year.
+    """
+    pos = file_path.rfind("/")
+    month = file_path[pos+5:pos+7]
+    if not month.isnumeric():
+      print("Invalid file format: ", file_path)
+    return month
+
+  def file_filter_condition(self, file_path):
+    """Determines whether subject file is a relevant source file to 
+    be transformed into a table entry.
+    Args:
+      file_path: The path to the file to be checked. e.g., _test/screened/test.ods_
+    Returns:
+      True if relevant source file, False otherwise.
+    """
+    len_from_end = 3
+    month = self.extract_month(file_path)
+    isOds = file_path[-len_from_end:] == "ods"
+    isRelevantMonth = month == self.subject_month
+    if isOds and isRelevantMonth:
+      sheet = self.get_data(file_path)
+      return sheet[self.FORM_IDENTIFIER_CELL] == self.FORM_IDENTIFIER
+    else:
+      print("Invalid file format.")
+      return False
 
   def set_source_file_names(self, dir_path):
     """Sets source_file_names with a list of the file names for the 
@@ -84,7 +133,7 @@ class TableEntries:
         file_path = os.path.join(root,name) 
         if self.file_filter_condition(file_path):
           self.source_file_names.append(file_path)
-
+  
   def get_data(self, file_path):
     """Extracts data from sheet.
     Args:
@@ -93,21 +142,6 @@ class TableEntries:
       A sheet object.
     """
     return pe.get_sheet(file_name=file_path)
-
-  def file_filter_condition(self, file_path):
-    """Determines whether subject file is a relevant source file to 
-    be transformed into a table entry.
-    Args:
-      file_path: The path to the file to be checked.
-    Returns:
-      True if relevant source file, False otherwise.
-    """
-    len_from_end = 3
-    if file_path[-len_from_end:] == "ods":
-      sheet = self.get_data(file_path)
-      return sheet[self.FORM_IDENTIFIER_CELL] == self.FORM_IDENTIFIER
-    else:
-      return False
   
   def set_total_area(self, building_area, room_area):
     """Sets a value for the total area depending on the input values for 
@@ -281,7 +315,7 @@ if __name__ == "__main__":
   config = Config()
 
   # Generate table entires
-  table_entries = TableEntries(config.path_to_source_files)
+  table_entries = TableEntries(config.path_to_source_files, config.subject_month)
   entries = table_entries.generate()
 
   # Generate table

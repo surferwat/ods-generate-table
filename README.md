@@ -36,9 +36,9 @@ python3 test.py
 ```
 
 ## To Do
-* [] add check to filter out the deals from non-current periods
-* [] add input fields for evaluation stages to screening template
-* [] add income yield column to summary table
+* [x] add check to filter out the deals from non-current periods
+* [ ] add input fields for evaluation stages to screening template
+* [ ] add income yield column to summary table
 
 ## References
 * [pyexcel](http://www.pyexcel.org/)

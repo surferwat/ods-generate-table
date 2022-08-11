@@ -15,21 +15,26 @@ class TestTableEntries(unittest.TestCase):
   @mock.patch.dict("os.environ", {"PATH_TO_SOURCE_FILES": "test/screened", "PATH_TO_TABLE_TEMPLATE": "test/test_table.ods" })
   def setUpClass(cls):
     cls.config = Config()
-    cls.table_entries = TableEntries(cls.config.path_to_source_files)
+    cls.table_entries = TableEntries(cls.config.path_to_source_files, cls.config.subject_month)
     
   def tearDown(self):
     self.table_entries.source_file_names = []
+  
+  def test_set_subject_month(self):
+    month = "08"
+    self.table_entries.set_subject_month(month)
+    self.assertEqual(self.table_entries.subject_month,"08")
 
   def test_get_data(self):
-    file_name = "test/screened/test.ods"
+    file_name = "test/screened/20220811_test.ods"
     sheet = self.table_entries.get_data(file_name)
     self.assertEqual(sheet['A1'], "スクリーニングフォーム")
 
   def test_file_filter_condition(self):
-    file_name = "test/screened/test.ods"
+    file_name = "test/screened/20220811_test.ods"
     condition = self.table_entries.file_filter_condition(file_name)
     self.assertTrue(condition)
-    file_name = "test/screened/test.odt"
+    file_name = "test/screened/20220811_test.odt"
     condition = self.table_entries.file_filter_condition(file_name)
     self.assertFalse(condition)
 
@@ -37,10 +42,15 @@ class TestTableEntries(unittest.TestCase):
     dir_path = "."
     self.table_entries.check_dir_path(dir_path)
   
+  def test_extract_month(self):
+    file_path = "test/screened/20220811_test.ods"
+    month = self.table_entries.extract_month(file_path)
+    self.assertEqual(month, "08")
+
   def test_set_source_file_names(self):
     dir_path = "test/screened"
     self.table_entries.set_source_file_names(dir_path)
-    self.assertEqual(self.table_entries.source_file_names, ["test/screened/test.ods"])
+    self.assertEqual(self.table_entries.source_file_names, ["test/screened/20220811_test.ods"])
   
   def test_set_total_area(self):
     building_area = "-"
@@ -81,11 +91,11 @@ class TestTable(unittest.TestCase):
     self.assertEqual(self.table.table_entries, entries)
   
   def test_check_file_path(self):
-    file_path = "test/screened/test.ods"
+    file_path = "test/screened/20220811_test.ods"
     self.table.check_file_path(file_path)
   
   def test_get_data(self):
-    file_name = "test/screened/test.ods"
+    file_name = "test/screened/20220811_test.ods"
     sheet = self.table.get_data(file_name)
     self.assertEqual(sheet['A1'], "スクリーニングフォーム")
 
