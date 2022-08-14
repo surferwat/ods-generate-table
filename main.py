@@ -49,6 +49,10 @@ class TableEntries:
   ROOM_AREA_CELL = 'C41'
   PRICE_CELL = 'C7'
   PRICE_PER_AREA_CELL = 'C8'
+  SCREENING_STAGE_CELL = 'F5'
+  FIRST_REVIEW_STAGE_CELL = 'F6'
+  PC_STAGE_CELL = 'F7'
+  C_STAGE_CELL = 'F8'
 
   source_file_names = []
   subject_month = ""
@@ -175,6 +179,10 @@ class TableEntries:
       total_area = self.set_total_area(sheet[self.BUILDING_AREA_CELL], sheet[self.ROOM_AREA_CELL])
       price = sheet[self.PRICE_CELL]
       price_per_area = sheet[self.PRICE_PER_AREA_CELL]
+      screening_stage = sheet[self.SCREENING_STAGE_CELL]
+      first_review_stage = sheet[self.FIRST_REVIEW_STAGE_CELL]
+      pc_stage = sheet[self.PC_STAGE_CELL]
+      c_stage = sheet[self.C_STAGE_CELL]
       self.table_entries.append({
         'admin_area': admin_area, 
         'district': district, 
@@ -183,6 +191,10 @@ class TableEntries:
         'total_area': total_area, 
         'price': price, 
         'price_per_area': price_per_area,
+        'screening_stage': screening_stage,
+        'first_review_stage': first_review_stage,
+        'pc_stage': pc_stage,
+        'c_stage': c_stage,
         'file_path': file_path
       })
     return self.table_entries
@@ -208,6 +220,10 @@ class Table:
   TOTAL_AREA_COL = 6
   PRICE_COL = 7
   PRICE_PER_AREA_COL = 8
+  SCREENING_STAGE_COL = 10
+  FIRST_REVIEW_STAGE_COL = 11
+  PC_STAGE_COL = 12
+  C_STAGE_COL = 13
   FILE_PATH_COL = 15
   
   table_template_path = ""
@@ -286,6 +302,10 @@ class Table:
       self.table_sheet[row - 1, self.TOTAL_AREA_COL - 1] = entry['total_area']
       self.table_sheet[row - 1, self.PRICE_COL - 1] = entry['price']
       self.table_sheet[row - 1, self.PRICE_PER_AREA_COL - 1] = entry['price_per_area']
+      self.table_sheet[row - 1, self.SCREENING_STAGE_COL - 1] = entry['screening_stage']
+      self.table_sheet[row - 1, self.FIRST_REVIEW_STAGE_COL - 1] = entry['first_review_stage']
+      self.table_sheet[row - 1, self.PC_STAGE_COL - 1] = entry['pc_stage']
+      self.table_sheet[row - 1, self.C_STAGE_COL - 1] = entry['c_stage']
       self.table_sheet[row - 1, self.FILE_PATH_COL - 1] = entry['file_path']
       row = row + 1
     
