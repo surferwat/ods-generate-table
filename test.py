@@ -81,6 +81,7 @@ class TestTable(unittest.TestCase):
       'total_area': "total_area", 
       'price': "price", 
       'price_per_area': "price_per_area",
+      'expected_yield': "expected_yield",
       'file_path': "file_path"
     }]
     self.table.set_table_entries(entries)
@@ -104,6 +105,7 @@ class TestTable(unittest.TestCase):
       'total_area': "total_area", 
       'price': "price", 
       'price_per_area': "price_per_area",
+      'expected_yield': "expected_yield",
       'screening_stage': "screening_stage",
       'first_review_stage': "first_review_stage",
       'pc_stage': "pc_stage",
@@ -120,10 +122,11 @@ class TestTable(unittest.TestCase):
     self.assertEqual(self.table.table_sheet[4,5],"total_area")
     self.assertEqual(self.table.table_sheet[4,6],"price")
     self.assertEqual(self.table.table_sheet[4,7],"price_per_area")
-    self.assertEqual(self.table.table_sheet[4,9],"screening_stage")
-    self.assertEqual(self.table.table_sheet[4,10],"first_review_stage")
-    self.assertEqual(self.table.table_sheet[4,11],"pc_stage")
-    self.assertEqual(self.table.table_sheet[4,12],"c_stage")
+    self.assertEqual(self.table.table_sheet[4,8],"expected_yield")
+    self.assertEqual(self.table.table_sheet[4,10],"screening_stage")
+    self.assertEqual(self.table.table_sheet[4,11],"first_review_stage")
+    self.assertEqual(self.table.table_sheet[4,12],"pc_stage")
+    self.assertEqual(self.table.table_sheet[4,13],"c_stage")
   
   def test_save(self):
     entries = [{
@@ -134,6 +137,7 @@ class TestTable(unittest.TestCase):
       'total_area': "total_area", 
       'price': "price", 
       'price_per_area': "price_per_area",
+      'expected_yield': "expected_yield",
       'screening_stage': "screening_stage",
       'first_review_stage': "first_review_stage",
       'pc_stage': "pc_stage",
