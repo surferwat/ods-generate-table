@@ -56,7 +56,7 @@ class TableEntries:
   C_STAGE_CELL = 'F8'
 
   source_file_names = []
-  subject_month = ""
+  subject_month = None
   table_entries = []
 
   def __init__(self, dir_path, subject_month):
@@ -67,18 +67,19 @@ class TableEntries:
     Returns:
       Nothing.
     """
-    self.set_source_file_names(dir_path)
     self.set_subject_month(subject_month)
-  
+    self.set_source_file_names(dir_path)
+    
   def set_subject_month(self, subject_month):
     """Sets subject_month with a value representing the month relevant 
     for the table.
     Args:
-      subject_month: The month relevant for the table.
+      subject_month: The month (number not str) relevant for the table.
     Returns:
       Nothing.
     """
-    self.subject_month = subject_month
+    self.subject_month = int(subject_month)
+    print(self.subject_month)
 
   def check_dir_path(self, dir_path):
     """Checks whether directory exists.
@@ -99,9 +100,7 @@ class TableEntries:
       Two digits that represent the month in the year.
     """
     pos = file_path.rfind("/")
-    month = file_path[pos+5:pos+7]
-    if not month.isnumeric():
-      print("Invalid file format: ", file_path)
+    month = int(file_path[pos+5:pos+7])
     return month
 
   def file_filter_condition(self, file_path):
@@ -113,14 +112,17 @@ class TableEntries:
       True if relevant source file, False otherwise.
     """
     len_from_end = 3
-    month = self.extract_month(file_path)
     isOds = file_path[-len_from_end:] == "ods"
-    isRelevantMonth = month == self.subject_month
-    if isOds and isRelevantMonth:
-      sheet = self.get_data(file_path)
-      return sheet[self.FORM_IDENTIFIER_CELL] == self.FORM_IDENTIFIER
+    if isOds:
+      month = self.extract_month(file_path)
+      isRelevantMonth = month == self.subject_month
+      if isRelevantMonth:
+        sheet = self.get_data(file_path)
+        return sheet[self.FORM_IDENTIFIER_CELL] == self.FORM_IDENTIFIER
+      else:
+        return False
     else:
-      print("Invalid file format.")
+      print("Invalid file format:", file_path)
       return False
 
   def set_source_file_names(self, dir_path):
@@ -172,7 +174,8 @@ class TableEntries:
     """
     for file_path in self.source_file_names:
       sheet = self.get_data(file_path)
-  
+
+      #TODO: self.CONSTANT may be empty, so need to add check for this
       admin_area = sheet[self.ADMIN_AREA_CELL]
       district = sheet[self.DISTRICT_CELL]
       property_type = sheet[self.PROPERTY_TYPE_CELL]

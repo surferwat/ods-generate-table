@@ -21,7 +21,7 @@ class TestTableEntries(unittest.TestCase):
   def test_set_subject_month(self):
     month = "08"
     self.table_entries.set_subject_month(month)
-    self.assertEqual(self.table_entries.subject_month,"08")
+    self.assertEqual(self.table_entries.subject_month,8)
 
   def test_get_data(self):
     file_name = "test/screened/20220811_test.ods"
@@ -43,7 +43,7 @@ class TestTableEntries(unittest.TestCase):
   def test_extract_month(self):
     file_path = "test/screened/20220811_test.ods"
     month = self.table_entries.extract_month(file_path)
-    self.assertEqual(month, "08")
+    self.assertEqual(month, 8)
 
   def test_set_source_file_names(self):
     dir_path = "test/screened"
